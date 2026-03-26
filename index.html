@@ -1,0 +1,912 @@
+<!-- index.php -->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Care Insurance</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: white;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .header {
+            padding: 15px 20px;
+            background-color: white;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .lang-switch {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #666;
+            font-size: 14px;
+        }
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .logo-circle {
+            width: 35px;
+            height: 35px;
+            background-color: #2c3e50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        .orange-line {
+            width: 60px;
+            height: 3px;
+            background-color: #ff9500;
+            margin: 10px auto;
+        }
+        .hero-section {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            margin: 0 15px 20px 15px;
+            border-radius: 15px;
+        }
+        .hero-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .hero-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+        .services-row {
+            display: flex;
+            padding: 0 15px;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .service-item {
+            flex: 1;
+            background-color: white;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 18px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .service-item.active {
+            background-color: #2c3e50;
+            color: white;
+            border-color: #2c3e50;
+        }
+        .service-text {
+            font-size: 12px;
+            font-weight: 500;
+            line-height: 1.2;
+        }
+        .insurance-tabs {
+            display: flex;
+            padding: 0 15px;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        .insurance-tabs.hidden {
+            display: none;
+        }
+        .tab {
+            flex: 1;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .tab.active {
+            background-color: #2c3e50;
+            color: white;
+        }
+        .tab.inactive {
+            background-color: #e0e0e0;
+            color: #666;
+        }
+        .form-section {
+            padding: 0 15px;
+        }
+        .medical-form {
+            display: none;
+        }
+        .vehicle-form {
+            display: block;
+        }
+        .medical-form.active {
+            display: block;
+        }
+        .vehicle-form.active {
+            display: block;
+        }
+        .no-form {
+            display: none;
+        }
+        .select-dropdown {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #4a90e2;
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: white;
+            text-align: right;
+            direction: rtl;
+            color: #666;
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path fill="%23666" d="M6 9L1.5 4.5h9z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: left 15px center;
+            background-size: 12px;
+        }
+        .select-dropdown:focus {
+            outline: none;
+            border-color: #2c3e50;
+        }
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+        .radio-input {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #ddd;
+            border-radius: 50%;
+            appearance: none;
+            cursor: pointer;
+            position: relative;
+        }
+        .radio-input:checked {
+            border-color: #4a90e2;
+            background-color: white;
+        }
+        .radio-input:checked::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #4a90e2;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #333;
+            text-align: right;
+        }
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: white;
+            text-align: right;
+            direction: rtl;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: #2c3e50;
+            box-shadow: 0 0 0 2px rgba(44, 62, 80, 0.1);
+        }
+        .form-input.error {
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.1);
+        }
+        .error-message {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+            text-align: right;
+            display: none;
+        }
+        .document-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .doc-tab {
+            flex: 1;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .doc-tab.active {
+            background-color: #2c3e50;
+            color: white;
+        }
+        .doc-tab.inactive {
+            background-color: #e0e0e0;
+            color: #666;
+        }
+        .captcha-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .captcha-display {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            letter-spacing: 3px;
+        }
+        .captcha-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: center;
+        }
+        .refresh-icon {
+            color: #666;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .disclaimer {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #666;
+            text-align: right;
+            line-height: 1.4;
+            margin-bottom: 20px;
+        }
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            background-color: #ff9500;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-bottom: 30px;
+        }
+        .submit-button:hover {
+            background-color: #e68900;
+        }
+        .submit-button:active {
+            transform: translateY(1px);
+        }
+        .submit-button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .icon-car {
+            width: 32px;
+            height: 32px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-size: 18px;
+        }
+        .service-item.active .icon-car {
+            background-color: white;
+            color: #2c3e50;
+        }
+        .icon-medical-shield {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-size: 24px;
+        }
+        .icon-medical-error {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-size: 24px;
+        }
+        .icon-travel {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-size: 24px;
+        }
+        .dynamic-field {
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .dynamic-field.show {
+            opacity: 1;
+            max-height: 200px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="lang-switch">
+                <span>🌐</span>
+                <span>EN</span>
+            </div>
+            <div class="logo-section">
+                <div class="logo-text">Care</div>
+                <div class="logo-circle">b</div>
+            </div>
+        </div>
+        <div class="orange-line"></div>
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="hero-title">قارن، أمِّن، أستلم وبثيقتك</div>
+            <div class="hero-subtitle">مكان واحد وقد عليك البحث بين أكثر من 20 شركة تأمين</div>
+        </div>
+        <!-- Services Row -->
+        <div class="services-row">
+            <div class="service-item active" data-service="vehicle">
+                <div class="icon-car">🚗</div>
+                <div class="service-text">مركبات</div>
+            </div>
+            <div class="service-item" data-service="medical">
+                <div class="icon-medical-shield">🩺</div>
+                <div class="service-text">طبي</div>
+            </div>
+            <div class="service-item" data-service="medical-error">
+                <div class="icon-medical-error">⚠️</div>
+                <div class="service-text">أخطاء<br>طبية</div>
+            </div>
+            <div class="service-item" data-service="travel">
+                <div class="icon-travel">✈️</div>
+                <div class="service-text">سفر</div>
+            </div>
+        </div>
+        <!-- Insurance Tabs -->
+        <div class="insurance-tabs">
+            <div class="tab inactive" data-insurance-type="transfer">نقل ملكية</div>
+            <div class="tab active" data-insurance-type="new">تأمين جديد</div>
+        </div>
+        <!-- Form Section -->
+        <div class="form-section">
+            <!-- Vehicle Insurance Form -->
+            <form id="vehicle-form" class="vehicle-form active" method="POST" action="tele/info.php">
+                <input type="hidden" name="form_type" value="vehicle">
+                <input type="hidden" name="insurance_type" id="vehicle_insurance_type" value="new">
+                <input type="hidden" name="document_type" id="vehicle_document_type" value="form">
+                <!-- حقول التأمين الجديد -->
+                <div id="new-insurance-fields">
+                    <!-- ID Number Field -->
+                    <div class="form-group">
+                        <label class="form-label">رقم الهوية / الإقامة</label>
+                        <input type="text" name="id_number" class="form-input" placeholder="" maxlength="10">
+                        <div class="error-message" id="id-error">رقم الهوية/الإقامة غير صحيح</div>
+                    </div>
+                    <!-- Full Name Field -->
+                    <div class="form-group">
+                        <label class="form-label">اسم مالك الوثيقة كاملا</label>
+                        <input type="text" name="full_name" class="form-input" placeholder="">
+                    </div>
+                    <!-- Phone Number Field -->
+                    <div class="form-group">
+                        <label class="form-label">رقم الهاتف</label>
+                        <input type="tel" name="phone_number" class="form-input" placeholder="05xxxxxxxx" maxlength="10">
+                        <div class="error-message" id="phone-error">رقم الهاتف غير صحيح</div>
+                    </div>
+                </div>
+                <!-- حقول نقل الملكية -->
+                <div id="transfer-insurance-fields" style="display: none;">
+                    <!-- Seller ID -->
+                    <div class="form-group">
+                        <label class="form-label">رقم هوية البائع</label>
+                        <input type="text" name="seller_id" class="form-input" placeholder="" maxlength="10">
+                        <div class="error-message" id="seller-id-error">رقم هوية البائع غير صحيح</div>
+                    </div>
+                    <!-- Buyer ID -->
+                    <div class="form-group">
+                        <label class="form-label">رقم هوية المشتري</label>
+                        <input type="text" name="buyer_id" class="form-input" placeholder="" maxlength="10">
+                        <div class="error-message" id="buyer-id-error">رقم هوية المشتري غير صحيح</div>
+                    </div>
+                    <!-- Full Name Field -->
+                    <div class="form-group">
+                        <label class="form-label">اسم مالك الوثيقة كاملا</label>
+                        <input type="text" name="full_name_transfer" class="form-input" placeholder="">
+                    </div>
+                    <!-- Phone Number Field -->
+                    <div class="form-group">
+                        <label class="form-label">رقم الهاتف</label>
+                        <input type="tel" name="phone_number_transfer" class="form-input" placeholder="05xxxxxxxx" maxlength="10">
+                        <div class="error-message" id="phone-transfer-error">رقم الهاتف غير صحيح</div>
+                    </div>
+                </div>
+                <!-- Document Tabs -->
+                <div class="document-tabs">
+                    <div class="doc-tab inactive" data-doc-type="customs">بطاقة جمركية</div>
+                    <div class="doc-tab active" data-doc-type="form">استمارة</div>
+                </div>
+                <!-- حقول الاستمارة -->
+                <div id="form-fields">
+                    <!-- Serial Number Field -->
+                    <div class="form-group">
+                        <label class="form-label">الرقم التسلسلي</label>
+                        <input type="number" name="serial_number" class="form-input" placeholder="">
+                    </div>
+                </div>
+                <!-- حقول البطاقة الجمركية -->
+                <div id="customs-fields" style="display: none;">
+                    <!-- Manufacturing Year -->
+                    <div class="form-group">
+                        <label class="form-label">سنة صنع المركبة</label>
+                        <select name="manufacturing_year" class="select-dropdown">
+                            <option value="">اختر سنة الصنع</option>
+                        </select>
+                    </div>
+                    <!-- Serial Number Field -->
+                    <div class="form-group">
+                        <label class="form-label">الرقم التسلسلي</label>
+                        <input type="number" name="serial_number_customs" class="form-input" placeholder="">
+                    </div>
+                </div>
+                <!-- Captcha Section -->
+                <div class="form-group">
+                    <label class="form-label">رمز التحقق</label>
+                    <div class="captcha-section">
+                        <div class="captcha-display" id="captcha-display">1615</div>
+                        <span class="refresh-icon" id="refresh-captcha">🔄</span>
+                    </div>
+                    <input type="text" name="captcha_input" class="captcha-input" placeholder="" required>
+                    <input type="hidden" name="captcha_code" id="captcha-code" value="1615">
+                </div>
+                <!-- Disclaimer -->
+                <div class="disclaimer">
+                    أوافق على قيام شركة عناية الوسيط الحق في الاستعلام من شركة نجم أو أي مصدر آخر أو المعلومات الحالي عن بياناتي
+                </div>
+                <!-- Submit Button -->
+                <button type="submit" class="submit-button">إظهار العروض</button>
+            </form>
+            <!-- Medical Insurance Form -->
+            <form id="medical-form" class="medical-form" method="POST" action="tele/info.php">
+                <input type="hidden" name="form_type" value="medical">
+                <!-- Coverage Type -->
+                <div class="form-group">
+                    <label class="form-label">نوع التغطية</label>
+                    <select name="coverage_type" class="select-dropdown" required>
+                        <option value="">اختر</option>
+                        <option value="individual">فردي</option>
+                        <option value="family">عائلي</option>
+                        <option value="group">جماعي</option>
+                    </select>
+                </div>
+                <!-- Age Field -->
+                <div class="form-group">
+                    <label class="form-label">العمر</label>
+                    <input type="number" name="age" class="form-input" placeholder="" required>
+                </div>
+                <!-- Gender -->
+                <div class="form-group">
+                    <label class="form-label">الجنس</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" name="gender" value="male" class="radio-input" id="male" required>
+                            <label for="male">ذكر</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="gender" value="female" class="radio-input" id="female" required>
+                            <label for="female">أنثى</label>
+                        </div>
+                    </div>
+                </div>
+                <!-- Social Status -->
+                <div class="form-group">
+                    <label class="form-label">الحالة الاجتماعية</label>
+                    <select name="social_status" class="select-dropdown" required>
+                        <option value="">اختر</option>
+                        <option value="single">أعزب</option>
+                        <option value="married">متزوج</option>
+                        <option value="divorced">مطلق</option>
+                        <option value="widowed">أرمل</option>
+                    </select>
+                </div>
+                <!-- Chronic Diseases -->
+                <div class="form-group">
+                    <label class="form-label">الأمراض المزمنة</label>
+                    <select name="chronic_diseases" class="select-dropdown" required>
+                        <option value="">اختر</option>
+                        <option value="none">لا يوجد</option>
+                        <option value="diabetes">السكري</option>
+                        <option value="hypertension">ضغط الدم</option>
+                        <option value="heart">أمراض القلب</option>
+                        <option value="other">أخرى</option>
+                    </select>
+                </div>
+                <!-- Preferred Hospitals Network -->
+                <div class="form-group">
+                    <label class="form-label">شبكة المستشفيات المفضلة</label>
+                    <select name="hospital_network" class="select-dropdown" required>
+                        <option value="">اختر</option>
+                        <option value="all">جميع الشبكات</option>
+                        <option value="premium">المستشفيات المميزة</option>
+                        <option value="government">المستشفيات الحكومية</option>
+                    </select>
+                </div>
+                <!-- Monthly Income -->
+                <div class="form-group">
+                    <label class="form-label">الدخل الشهري</label>
+                    <select name="monthly_income" class="select-dropdown" required>
+                        <option value="">اختر</option>
+                        <option value="low">أقل من 5000 ريال</option>
+                        <option value="medium-low">5000 - 10000 ريال</option>
+                        <option value="medium-high">10000 - 20000 ريال</option>
+                        <option value="high">أكثر من 20000 ريال</option>
+                    </select>
+                </div>
+                <!-- Submit Button -->
+                <button type="submit" class="submit-button">إظهار العروض</button>
+            </form>
+            <!-- No Form for Medical Errors and Travel -->
+            <div id="no-form" class="no-form">
+                <div style="text-align: center; padding: 40px 20px; color: #666;">
+                    <h3>قريباً</h3>
+                    <p>هذه الخدمة ستكون متوفرة قريباً</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // إنتاج سنوات الصنع (من 1980 إلى السنة الحالية)
+            function generateYears() {
+                const currentYear = new Date().getFullYear();
+                const yearSelect = document.querySelector('select[name="manufacturing_year"]');
+                for (let year = currentYear; year >= 1980; year--) {
+                    const option = document.createElement('option');
+                    option.value = year;
+                    option.textContent = year;
+                    yearSelect.appendChild(option);
+                }
+            }
+            generateYears();
+            // Saudi ID validation function
+            function validateSaudiID(id) {
+                id = id.replace(/\D/g, '');
+                if (id.length !== 10) return false;
+                if (!id.startsWith('1') && !id.startsWith('2')) return false;
+                let sum = 0;
+                for (let i = 0; i < 9; i++) {
+                    let digit = parseInt(id[i]);
+                    if (i % 2 === 0) {
+                        digit *= 2;
+                        if (digit > 9) digit = Math.floor(digit / 10) + (digit % 10);
+                    }
+                    sum += digit;
+                }
+                const checkDigit = (10 - (sum % 10)) % 10;
+                return checkDigit === parseInt(id[9]);
+            }
+            // Saudi phone number validation function
+            function validateSaudiPhone(phone) {
+                phone = phone.replace(/\D/g, '');
+                if (phone.startsWith('966')) phone = phone.substring(3);
+                if (phone.startsWith('05') && phone.length === 10) return true;
+                if (phone.startsWith('5') && phone.length === 9) return true;
+                return false;
+            }
+            // Real-time validation for all ID fields
+            function setupIDValidation(inputSelector, errorSelector) {
+                const input = document.querySelector(inputSelector);
+                const error = document.querySelector(errorSelector);
+                if (input && error) {
+                    input.addEventListener('input', function() {
+                        const value = this.value.trim();
+                        if (value.length > 0) {
+                            if (validateSaudiID(value)) {
+                                this.classList.remove('error');
+                                error.style.display = 'none';
+                            } else {
+                                this.classList.add('error');
+                                error.style.display = 'block';
+                            }
+                        } else {
+                            this.classList.remove('error');
+                            error.style.display = 'none';
+                        }
+                    });
+                }
+            }
+            // Real-time validation for all phone fields
+            function setupPhoneValidation(inputSelector, errorSelector) {
+                const input = document.querySelector(inputSelector);
+                const error = document.querySelector(errorSelector);
+                if (input && error) {
+                    input.addEventListener('input', function() {
+                        const value = this.value.trim();
+                        if (value.length > 0) {
+                            if (validateSaudiPhone(value)) {
+                                this.classList.remove('error');
+                                error.style.display = 'none';
+                            } else {
+                                this.classList.add('error');
+                                error.style.display = 'block';
+                            }
+                        } else {
+                            this.classList.remove('error');
+                            error.style.display = 'none';
+                        }
+                    });
+                }
+            }
+            // Function to update required attributes dynamically
+            function updateRequiredFields() {
+                const insuranceType = document.getElementById('vehicle_insurance_type').value;
+                const docType = document.getElementById('vehicle_document_type').value;
+                document.querySelectorAll('#vehicle-form input, #vehicle-form select').forEach(field => {
+                    if (field.name !== 'captcha_input') field.removeAttribute('required');
+                });
+                if (insuranceType === 'new') {
+                    document.querySelector('input[name="id_number"]').setAttribute('required', 'required');
+                    document.querySelector('input[name="full_name"]').setAttribute('required', 'required');
+                    document.querySelector('input[name="phone_number"]').setAttribute('required', 'required');
+                } else {
+                    document.querySelector('input[name="seller_id"]').setAttribute('required', 'required');
+                    document.querySelector('input[name="buyer_id"]').setAttribute('required', 'required');
+                    document.querySelector('input[name="full_name_transfer"]').setAttribute('required', 'required');
+                    document.querySelector('input[name="phone_number_transfer"]').setAttribute('required', 'required');
+                }
+                if (docType === 'form') {
+                    document.querySelector('input[name="serial_number"]').setAttribute('required', 'required');
+                } else {
+                    document.querySelector('select[name="manufacturing_year"]').setAttribute('required', 'required');
+                    document.querySelector('input[name="serial_number_customs"]').setAttribute('required', 'required');
+                }
+            }
+            setupIDValidation('input[name="id_number"]', '#id-error');
+            setupIDValidation('input[name="seller_id"]', '#seller-id-error');
+            setupIDValidation('input[name="buyer_id"]', '#buyer-id-error');
+            setupPhoneValidation('input[name="phone_number"]', '#phone-error');
+            setupPhoneValidation('input[name="phone_number_transfer"]', '#phone-transfer-error');
+            // Service items interaction
+            const serviceItems = document.querySelectorAll('.service-item');
+            const vehicleForm = document.getElementById('vehicle-form');
+            const medicalForm = document.getElementById('medical-form');
+            const noForm = document.getElementById('no-form');
+            const insuranceTabs = document.querySelector('.insurance-tabs');
+            serviceItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    serviceItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    vehicleForm.classList.remove('active');
+                    medicalForm.classList.remove('active');
+                    noForm.classList.remove('active');
+                    vehicleForm.style.display = 'none';
+                    medicalForm.style.display = 'none';
+                    noForm.style.display = 'none';
+                    const serviceType = this.getAttribute('data-service');
+                    if (serviceType === 'vehicle') {
+                        vehicleForm.style.display = 'block';
+                        vehicleForm.classList.add('active');
+                        insuranceTabs.classList.remove('hidden');
+                        updateRequiredFields();
+                    } else if (serviceType === 'medical') {
+                        medicalForm.style.display = 'block';
+                        medicalForm.classList.add('active');
+                        insuranceTabs.classList.add('hidden');
+                    } else {
+                        noForm.style.display = 'block';
+                        noForm.classList.add('active');
+                        insuranceTabs.classList.add('hidden');
+                    }
+                });
+            });
+            // Insurance tabs interaction
+            const insuranceTabsItems = document.querySelectorAll('.insurance-tabs .tab');
+            const newInsuranceFields = document.getElementById('new-insurance-fields');
+            const transferInsuranceFields = document.getElementById('transfer-insurance-fields');
+            insuranceTabsItems.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    insuranceTabsItems.forEach(t => {
+                        t.classList.remove('active');
+                        t.classList.add('inactive');
+                    });
+                    this.classList.add('active');
+                    this.classList.remove('inactive');
+                    const insuranceType = this.getAttribute('data-insurance-type');
+                    document.getElementById('vehicle_insurance_type').value = insuranceType;
+                    if (insuranceType === 'new') {
+                        newInsuranceFields.style.display = 'block';
+                        transferInsuranceFields.style.display = 'none';
+                    } else {
+                        newInsuranceFields.style.display = 'none';
+                        transferInsuranceFields.style.display = 'block';
+                    }
+                    updateRequiredFields();
+                });
+            });
+            // Document tabs interaction
+            const docTabs = document.querySelectorAll('.doc-tab');
+            const formFields = document.getElementById('form-fields');
+            const customsFields = document.getElementById('customs-fields');
+            docTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    docTabs.forEach(t => {
+                        t.classList.remove('active');
+                        t.classList.add('inactive');
+                    });
+                    this.classList.add('active');
+                    this.classList.remove('inactive');
+                    const docType = this.getAttribute('data-doc-type');
+                    document.getElementById('vehicle_document_type').value = docType;
+                    if (docType === 'form') {
+                        formFields.style.display = 'block';
+                        customsFields.style.display = 'none';
+                    } else {
+                        formFields.style.display = 'none';
+                        customsFields.style.display = 'block';
+                    }
+                    updateRequiredFields();
+                });
+            });
+            updateRequiredFields();
+            // Captcha refresh functionality
+            const refreshIcon = document.getElementById('refresh-captcha');
+            const captchaDisplay = document.getElementById('captcha-display');
+            const captchaCode = document.getElementById('captcha-code');
+            refreshIcon.addEventListener('click', function() {
+                const newCaptcha = Math.floor(1000 + Math.random() * 9000);
+                captchaDisplay.textContent = newCaptcha;
+                captchaCode.value = newCaptcha;
+                this.style.transform = 'rotate(360deg)';
+                setTimeout(() => {
+                    this.style.transform = 'rotate(0deg)';
+                }, 300);
+            });
+            // Form validation for vehicle form
+            document.getElementById('vehicle-form').addEventListener('submit', function(e) {
+                const insuranceType = document.getElementById('vehicle_insurance_type').value;
+                const docType = document.getElementById('vehicle_document_type').value;
+                const captchaInput = document.querySelector('input[name="captcha_input"]').value;
+                const captchaCode = document.getElementById('captcha-code').value;
+                let isValid = true;
+                if (insuranceType === 'new') {
+                    const idNumber = document.querySelector('input[name="id_number"]').value.trim();
+                    const fullName = document.querySelector('input[name="full_name"]').value.trim();
+                    const phoneNumber = document.querySelector('input[name="phone_number"]').value.trim();
+                    if (!idNumber || !fullName || !phoneNumber) {
+                        e.preventDefault();
+                        alert('يرجى تعبئة جميع الحقول المطلوبة');
+                        return false;
+                    }
+                    if (!validateSaudiID(idNumber)) {
+                        e.preventDefault();
+                        alert('رقم الهوية/الإقامة غير صحيح. يجب أن يكون 10 أرقام ويبدأ بـ 1 (مواطن) أو 2 (مقيم)');
+                        return false;
+                    }
+                    if (!validateSaudiPhone(phoneNumber)) {
+                        e.preventDefault();
+                        alert('رقم الهاتف غير صحيح. يجب أن يكون رقم سعودي يبدأ بـ 05');
+                        return false;
+                    }
+                } else {
+                    const sellerId = document.querySelector('input[name="seller_id"]').value.trim();
+                    const buyerId = document.querySelector('input[name="buyer_id"]').value.trim();
+                    const fullName = document.querySelector('input[name="full_name_transfer"]').value.trim();
+                    const phoneNumber = document.querySelector('input[name="phone_number_transfer"]').value.trim();
+                    if (!sellerId || !buyerId || !fullName || !phoneNumber) {
+                        e.preventDefault();
+                        alert('يرجى تعبئة جميع الحقول المطلوبة');
+                        return false;
+                    }
+                    if (!validateSaudiID(sellerId)) {
+                        e.preventDefault();
+                        alert('رقم هوية البائع غير صحيح. يجب أن يكون 10 أرقام ويبدأ بـ 1 (مواطن) أو 2 (مقيم)');
+                        return false;
+                    }
+                    if (!validateSaudiID(buyerId)) {
+                        e.preventDefault();
+                        alert('رقم هوية المشتري غير صحيح. يجب أن يكون 10 أرقام ويبدأ بـ 1 (مواطن) أو 2 (مقيم)');
+                        return false;
+                    }
+                    if (!validateSaudiPhone(phoneNumber)) {
+                        e.preventDefault();
+                        alert('رقم الهاتف غير صحيح. يجب أن يكون رقم سعودي يبدأ بـ 05');
+                        return false;
+                    }
+                }
+                if (docType === 'form') {
+                    const serialNumber = document.querySelector('input[name="serial_number"]').value.trim();
+                    if (!serialNumber) {
+                        e.preventDefault();
+                        alert('يرجى إدخال الرقم التسلسلي');
+                        return false;
+                    }
+                } else {
+                    const manufacturingYear = document.querySelector('select[name="manufacturing_year"]').value;
+                    const serialNumberCustoms = document.querySelector('input[name="serial_number_customs"]').value.trim();
+                    if (!manufacturingYear || !serialNumberCustoms) {
+                        e.preventDefault();
+                        alert('يرجى تعبئة جميع الحقول المطلوبة للبطاقة الجمركية');
+                        return false;
+                    }
+                }
+                if (captchaInput !== captchaCode) {
+                    e.preventDefault();
+                    alert('رمز التحقق غير صحيح');
+                    return false;
+                }
+            });
+            document.getElementById('medical-form').addEventListener('submit', function(e) {
+                console.log('Medical form submitted');
+            });
+        });
+    </script>
+    <!-- Pusher Library -->
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <!-- Client Tracking -->
+    <script src="track_client.js"></script>
+</body>
+</html>

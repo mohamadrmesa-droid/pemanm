@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Care b – التأمين ضد الغير</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #0c3b5a;
+      --primary-hover: #092f47;
+      --bg: #f0f4f8;
+      --card-border: #d1dce6;
+      --muted: #6b7280;
+      --accent: #f4b400;
+      --radius: 16px;
+    }
+
+    @font-face { font-family:'Tajawal'; src: local('Tajawal'); }
+
+    body {
+      background: linear-gradient(135deg, #e8f1f8 0%, #d6e8f5 100%);
+      font-family: 'Tajawal', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    .tabs .btn {
+      border-radius: 999px;
+      font-weight: 700;
+      padding: 0.5rem 1.2rem;
+      border: 1px solid var(--card-border);
+      background: #fff;
+      color: #0f2b3d;
+      transition: all 0.3s;
+    }
+
+    .tabs .btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(12, 59, 90, 0.3);
+    }
+
+    .intro {
+      background: linear-gradient(135deg, var(--primary) 0%, #0a5075 100%);
+      color: #fff;
+      border-radius: 15px;
+      box-shadow: 0 8px 24px rgba(12, 59, 90, 0.25);
+      padding: 1.5rem;
+    }
+
+    .intro h6 {
+      font-weight: 800;
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .plan-card {
+      border: 2px solid var(--card-border);
+      border-radius: var(--radius);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      background: #fff;
+      margin-bottom: 1.2rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .plan-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+    }
+
+    .plan-card .logo {
+      max-height: 42px;
+      object-fit: contain;
+    }
+
+    .plan-card .divider {
+      height: 2px;
+      background: linear-gradient(to right, transparent, var(--card-border), transparent);
+      margin: 1rem 0;
+    }
+
+    .plan-card .meta {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .price {
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .price .coin {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #ffd04d, #f4b400);
+      border: 1px solid #e6a700;
+      box-shadow: 0 2px 6px rgba(244, 180, 0, 0.3);
+    }
+
+    .buy-btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 0.6rem 1.3rem;
+      font-weight: 800;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(12, 59, 90, 0.3);
+    }
+
+    .buy-btn:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(12, 59, 90, 0.4);
+    }
+
+    .feat-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin: 0.6rem 0;
+      font-size: 0.95rem;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid #f5f5f5;
+    }
+
+    .feat-row:last-child {
+      border-bottom: none;
+    }
+
+    .chk {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #c5d3e0;
+      border-radius: 6px;
+      background: #fff;
+      display: grid;
+      place-content: center;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .chk:checked {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .chk:checked::after {
+      content: '';
+      width: 9px;
+      height: 6px;
+      border-left: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      transform: rotate(-45deg);
+    }
+
+    .chk:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      background: #f0f0f0;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.2rem 0.6rem;
+      background: #fff8e6;
+      border: 1px solid #ffe5b4;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      color: #d97706;
+      font-weight: 600;
+    }
+
+    .card-body {
+      padding: 1.3rem;
+    }
+
+    .fw-bold {
+      font-weight: 800;
+      color: #1a1a1a;
+      font-size: 1.05rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container py-3">
+    <div class="tabs text-center mb-3">
+      <button class="btn active" type="button">ضد الغير</button>
+      <button class="btn" type="button" id="shamelBtn">شامل</button>
+    </div>
+
+    <div class="intro mb-4">
+      <h6>التأمين ضد الغير</h6>
+      <div class="meta">تغطية أساسية للمسؤولية تجاه الغير بحد أقصى 10,000,000 ريال</div>
+    </div>
+
+    <div id="cards"></div>
+
+    <template id="card-tpl">
+      <div class="card plan-card">
+        <div class="card-body">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <img class="logo" alt="logo" />
+            <div>
+              <div class="fw-bold" data-name></div>
+              <div class="meta">تأمين ضد الغير</div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <div class="fw-bold">المزايا الأساسية</div>
+            <div class="meta">مشمول</div>
+          </div>
+          <div data-features></div>
+          <div class="d-flex align-items-center justify-content-between mt-3">
+            <button class="buy-btn" data-buy-btn>اشترِ الآن</button>
+            <div class="price" data-price></div>
+          </div>
+        </div>
+      </div>
+    </template>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('user_id') || localStorage.getItem('user_id');
+
+    document.getElementById('shamelBtn').addEventListener('click', function() {
+      window.location.href = userId ? `shamel.html?user_id=${userId}` : 'shamel.html';
+    });
+
+    const data = [
+      { name:'شركة ولاء للتأمين', logo:'assets/logos/walaa.jpg', base:502, features:[
+        {label:'المسؤولية المدنية تجاه الغير – حد أقصى 10,000,000', add:0, fixed:true},
+        {label:'المساعدة على الطريق', add:50},
+        {label:'تغطية الحوادث الشخصية للسائق', add:20}
+      ]},
+      { name:'الجزيرة تكافل', logo:'assets/logos/aljazira.webp', base:520, features:[
+        {label:'المسؤولية المدنية تجاه الغير – حد أقصى 10,000,000', add:0, fixed:true}
+      ]},
+      { name:'الخليجية العامة للتأمين', logo:'assets/logos/khalejeah.webp', base:630, features:[
+        {label:'المسؤولية المدنية تجاه الغير – حد أقصى 10,000,000', add:0, fixed:true},
+        {label:'مساعدة على الطريق', add:25},
+        {label:'تغطية الحوادث الشخصية للسائق', add:60},
+        {label:'تغطية الحوادث الشخصية للركاب', add:290}
+      ]},
+      { name:'المتحدة للتأمين التعاوني', logo:'assets/logos/almotahida.png', base:650, features:[
+        {label:'المسؤولية المدنية تجاه الغير – حد أقصى 10,000,000', add:0, fixed:true},
+        {label:'المساعدة على الطريق', add:40},
+        {label:'تغطية الحوادث الشخصية للسائق', add:150}
+      ]},
+      { name:'بروج للتأمين', logo:'assets/logos/borog.png', base:679, features:[
+        {label:'المسؤولية المدنية تجاه الغير – حد أقصى 10,000,000', add:0, fixed:true},
+        {label:'المساعدة على الطريق', add:70},
+        {label:'تغطية الحوادث الشخصية للسائق', add:20}
+      ]},
+      { name:'شركة أمانة للتأمين', logo:'assets/logos/amana.jpg', base:705, features:[
+        {label:'المسؤولية المدنية تجاه الغير – حد أقصى 10,000,000', add:0, fixed:true},
+        {label:'إصابة السائق/حادث شخصي', add:50},
+        {label:'المساعدة على الطريق الممتد', add:50}
+      ]},
+      { name:'التعاونية للتأمين', logo:'assets/logos/tawuniya.jpg', base:734, features:[
+        {label:'المسؤولية المدنية تجاه الغير – حد أقصى 10,000,000', add:0, fixed:true},
+        {label:'المساعدة على الطريق', add:50}
+      ]},
+      { name:'الشركة الوطنية للتأمين', logo:'assets/logos/alwatania.png', base:800, features:[
+        {label:'المسؤولية المدنية تجاه الغير – حد أقصى 10,000,000', add:0, fixed:true}
+      ]},
+      { name:'ليفا للتأمين', logo:'assets/logos/liva.jpg', base:800, features:[
+        {label:'المسؤولية المدنية تجاه الغير – حد أقصى 10,000,000', add:0, fixed:true},
+        {label:'تغطية الحوادث الشخصية للسائق', add:280},
+        {label:'المساعدة على الطريق', add:50}
+      ]},
+      { name:'شركة الدرع العربي', logo:'assets/logos/arabian.webp', base:800, features:[
+        {label:'المسؤولية المدنية تجاه الغير – حد أقصى 10,000,000', add:0, fixed:true},
+        {label:'مساعدة على الطريق', add:25},
+        {label:'تغطية الحوادث الشخصية للسائق', add:60},
+        {label:'تغطية الحوادث الشخصية للركاب', add:290}
+      ]},
+      { name:'سندة للتأمين', logo:'assets/logos/sanad.png', base:838, features:[
+        {label:'المسؤولية المدنية تجاه الغير – حد أقصى 10,000,000', add:0, fixed:true},
+        {label:'المساعدة على الطريق', add:40}
+      ]},
+      { name:'ميدغلف للتأمين', logo:'assets/logos/medgulf.png', base:838, features:[
+        {label:'المسؤولية المدنية تجاه الغير – حد أقصى 10,000,000', add:0, fixed:true},
+        {label:'تغطية الحوادث الشخصية للسائق', add:55}
+      ]},
+      { name:'متكاملة للتأمين', logo:'assets/logos/motakamela.jpg', base:900, features:[
+        {label:'المسؤولية المدنية تجاه الغير – حد أقصى 10,000,000', add:0, fixed:true},
+        {label:'المساعدة على الطريق', add:30}
+      ]},
+      { name:'شركة الاتحاد للتأمين', logo:'assets/logos/aletihad.png', base:902, features:[
+        {label:'المسؤولية المدنية تجاه الغير – حد أقصى 10,000,000', add:0, fixed:true},
+        {label:'تغطية الحوادث الشخصية للسائق', add:50}
+      ]},
+      { name:'المجموعة المتحدة للتأمين التعاوني (UCA)', logo:'assets/logos/almotahida.png', base:977, features:[
+        {label:'المسؤولية المدنية تجاه الغير – حد أقصى 10,000,000', add:0, fixed:true},
+        {label:'المساعدة على الطريق', add:50},
+        {label:'تغطية الحوادث الشخصية للسائق', add:240}
+      ]},
+      { name:'التأمين العربي التعاوني', logo:'assets/logos/arabia-coop.png', base:1020, features:[
+        {label:'المسؤولية المدنية تجاه الغير – حد أقصى 10,000,000', add:0, fixed:true},
+        {label:'تغطية الحوادث الشخصية للسائق', add:60}
+      ]},
+      { name:'تكافل الراجحي', logo:'assets/logos/takafol.jpg', base:1300, features:[
+        {label:'المسؤولية المدنية تجاه الغير – حد أقصى 10,000,000', add:0, fixed:true},
+        {label:'الإصدار السريع', add:100},
+        {label:'المساعدة على الطريق', add:30},
+        {label:'حوادث السائقين', add:150},
+        {label:'حوادث الركاب', add:150}
+      ]},
+      { name:'Allianz – أليانز', logo:'assets/logos/allianz.png', base:1400, features:[
+        {label:'المسؤولية المدنية تجاه الغير – حد أقصى 10,000,000', add:0, fixed:true},
+        {label:'تغطية الحوادث الشخصية للسائق فقط', add:60}
+      ]},
+      { name:'GIG – جي آي جي', logo:'assets/logos/gig.png', base:2000, features:[
+        {label:'المسؤولية المدنية تجاه الغير – حد أقصى 10,000,000', add:0, fixed:true},
+        {label:'المساعدة على الطريق', add:50},
+        {label:'توسعة التغطية القانونية', add:270},
+        {label:'تغطية الحوادث الشخصية للسائق', add:60}
+      ]}
+    ];
+
+    const money = v => new Intl.NumberFormat('ar-EG').format(v) + ' ﷼';
+
+    data.forEach(plan => {
+      const node = document.getElementById('card-tpl').content.cloneNode(true);
+      const img = node.querySelector('img.logo');
+      img.src = plan.logo;
+      img.alt = plan.name;
+      node.querySelector('[data-name]').textContent = plan.name;
+
+      const featsBox = node.querySelector('[data-features]');
+      plan.features.forEach(f => {
+        const row = document.createElement('label');
+        row.className = 'feat-row';
+        
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.className = 'chk';
+        cb.dataset.add = f.add;
+        if (f.fixed) {
+          cb.checked = true;
+          cb.disabled = true;
+        }
+        
+        const txt = document.createElement('span');
+        txt.textContent = f.label;
+        
+        row.appendChild(cb);
+        row.appendChild(txt);
+        
+        if (f.add) {
+          const chip = document.createElement('span');
+          chip.className = 'chip';
+          chip.textContent = `+${f.add}`;
+          row.appendChild(chip);
+        }
+        
+        featsBox.appendChild(row);
+      });
+
+      const priceEl = node.querySelector('[data-price]');
+      const buyBtn = node.querySelector('[data-buy-btn]');
+
+      const update = () => {
+        let total = plan.base;
+        featsBox.querySelectorAll('.chk').forEach(c => {
+          if (!c.disabled && c.checked) total += Number(c.dataset.add || 0)
+        });
+        priceEl.innerHTML = `<span class="coin"></span>${money(total)}`;
+      };
+      
+      featsBox.addEventListener('change', update);
+      update();
+
+      buyBtn.addEventListener('click', () => {
+        let finalPrice = plan.base;
+        const selectedFeatures = [];
+        
+        featsBox.querySelectorAll('.chk').forEach(c => {
+          if (!c.disabled && c.checked) {
+            const addPrice = Number(c.dataset.add || 0);
+            finalPrice += addPrice;
+            if (addPrice > 0) {
+              selectedFeatures.push({
+                label: c.parentElement.querySelector('span').textContent,
+                price: addPrice
+              });
+            }
+          }
+        });
+
+        const vat = Math.round(finalPrice * 0.15 * 100) / 100;
+        const totalWithVat = Math.round((finalPrice + vat) * 100) / 100;
+
+        localStorage.setItem('insurance_data', JSON.stringify({
+          company: plan.name,
+          logo: plan.logo,
+          plan: 'تأمين ضد الغير',
+          base: plan.base,
+          price: finalPrice,
+          vat: vat,
+          total: totalWithVat,
+          features: selectedFeatures
+        }));
+
+        window.location.href = userId ? `pay.html?user_id=${userId}` : 'pay.html';
+      });
+
+      document.getElementById('cards').appendChild(node);
+    });
+  </script>
+
+  <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+  <script src="track_client.js"></script>
+</body>
+</html>
