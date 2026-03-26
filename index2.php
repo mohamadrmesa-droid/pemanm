@@ -157,9 +157,9 @@
         return;
       }
       if (type === 'comprehensive'){
-        window.location.href = 'shamel.html';
+        window.location.href = 'shamel.php';
       } else if (type === 'third-party'){
-        window.location.href = 'gher.html';
+        window.location.href = 'gher.php';
       }
     });
   </script>
