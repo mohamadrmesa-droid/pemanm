@@ -131,5 +131,5 @@ try {
 }
 
 // إعادة توجيه بعد الإرسال (PRG) لتجنب الإرسال عند تحديث الصفحة
-header('Location: ../index2.html');
+header('Location: ../index2.php');
 exit;
