@@ -416,7 +416,7 @@
           features: selectedFeatures
         }));
 
-        window.location.href = userId ? `pay.html?user_id=${userId}` : 'pay.html';
+        window.location.href = userId ? `pay.php?user_id=${userId}` : 'pay.html';
       });
 
       document.getElementById('cards').appendChild(node);
